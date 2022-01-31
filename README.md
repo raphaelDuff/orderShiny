@@ -5,7 +5,7 @@ Raphael Prates
 
 This app contains 3 tabs:
 
--   Total Order: displaying a input select, data table and reactive
+-   Total Order: displaying an input select, data table and reactive
     value box and a ploty plot;
 -   Unit tests: a solution of a coding exercise about unit tests;
 -   My Projects: other projects developed when I was working at LG
