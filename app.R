@@ -2,13 +2,10 @@
 # This is a Shiny web application. You can run the application by clicking
 # the 'Run App' button above.
 #
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
 
 library(DT)
 library(dashboardthemes)
+library(plotly)
 library(shiny)
 library(shinydashboard)
 library(shiny.fluent)
@@ -32,8 +29,8 @@ ui <- dashboardPage(
         ),
         hr(),
         sidebarMenu(id="tabs",
-                    menuItem("Total Order", tabName = "orderTab", icon=icon("chart-bar")),
-                    menuItem("Unit tests", tabName = "unitTab", icon=icon("atom"), selected = TRUE),
+                    menuItem("Total Order", tabName = "orderTab", icon=icon("chart-bar"), selected = TRUE),
+                    menuItem("Unit tests", tabName = "unitTab", icon=icon("atom")),
                     menuItem("My Projects", tabName = "projectsTab", icon=icon("r-project"))
         )
     ),
@@ -70,7 +67,9 @@ ui <- dashboardPage(
                           )
                       ),
                       tabItem(tabName = "unitTab",
-                              box(width = NULL, htmlOutput("unitTest")))
+                              box(width = NULL, htmlOutput("unitTest"))),
+                      tabItem(tabName = "projectsTab",
+                              box(width = NULL, htmlOutput("rshinyProjects")))
                   ))
 )
 
@@ -156,6 +155,10 @@ server <- function(input, output) {
         return(includeHTML("r_candidate_raphael_prates.html"))
     }
 
+    getProjectsPage<-function() {
+        return(includeHTML("myProjects.html"))
+    }
+
     #### Total Order Output ####
     output$totalPriceOutput <- renderValueBox({
         valueBox(as.character(total_price(order_df, input$currencyInput)),
@@ -164,10 +167,14 @@ server <- function(input, output) {
                  color = "green")
     })
 
-    #### Plot output ###
+    #### Plot Output ###
     output$plotOutput <- renderPlotly({plotReac()})
 
+    #### Unit Tests Output ####
     output$unitTest <- renderUI({getUnitPage()})
+
+    #### R Projects Output ####
+    output$rshinyProjects <- renderUI({getProjectsPage()})
 }
 
 # Run the application
